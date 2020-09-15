@@ -1,0 +1,113 @@
+\documentclass{exam}
+
+%------------------------ packages ------------------------%
+\usepackage{amsmath,amsfonts,amsthm,amssymb,amsopn,bm}
+\usepackage{pythontex}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage[paper=letterpaper,margin=1in,includeheadfoot,footskip=0.25in,headsep=0.25in]{geometry}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdfborder={0 0 1},colorlinks=true,citecolor=black,plainpages=false]{hyperref}
+%\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage[english]{babel}
+\usepackage{pdfpages,bbm}
+\usepackage{enumitem}
+\usepackage{todonotes}
+
+
+%------------------------ math ------------------------%
+\newcommand{\R}{\mathbb{R}} % real domain
+\newcommand{\Rset}{\mathbb{R}} % real domain
+\newcommand{\argmin}{\operatorname{argmin}}
+\newcommand{\argmax}{\operatorname{argmax}}
+\newcommand{\xv}{\mathbf{x}}
+\newcommand{\wv}{\mathbf{w}}
+\newcommand{\Xv}{\mathbf{X}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\M}{\mathbf{M}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\Proj}{\mathbf{P}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\U}{\mathbf{U}}
+\renewcommand{\L}{\mathbf{L}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\mD}{\mathbf{D}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\rank}{rank}
+
+
+%------------------------ exam class macros ------------------------%
+\checkboxchar{$\Box$}
+\renewcommand{\checkboxeshook}{
+  \settowidth{\leftmargin}{W.}
+  \labelwidth\leftmargin\advance\labelwidth-\labelsep
+}
+
+\newcommand{\grade}[1]{\small\textcolor{magenta}{\emph{[#1 points]}} \normalsize}
+
+\begin{document}
+
+\title{Homework 2 Written Assignment}
+\author{\Large \bf 10-605/10-805: Machine Learning with Large Datasets}
+\date{{\bf Due Tuesday, September 29th at 1:30:00 PM Eastern Time}}
+\maketitle
+
+\noindent Submit your solutions via Gradescope, \textbf{with your solution to each subproblem on a separate page}, i.e., following the template below.  Note that Homework 2 consists of two parts: this written assignment, and a programming assignment. The written part is worth \textbf{30\%} of your total HW2 grade (programming part makes up the remaining 70\%).
+
+\newpage
+
+\section{Nystr\"{o}m Method (30 points)} Nystr\"{o}m method. Define the following block representation of a kernel matrix:
+\vspace{-.5em}
+\begin{equation*}
+\K = 
+\begin{bmatrix}
+      \W & \K_{21}^\top\\
+      \K_{21} & \K_{22}
+\end{bmatrix}
+\quad \text{and} \quad
+\C = 
+\begin{bmatrix}
+\W \\
+\K_{21}
+\end{bmatrix}.
+\end{equation*}
+The Nystr\"{o}m method uses $\W \in \Rset^{l \times l}$, $\C \in \Rset^{m \times
+l}$ and $\K \in \Rset^{m\times m}$ to generate the approximation $\widetilde \K = \C \W^\dagger \C^\top \approx \K$.
+
+\begin{enumerate}[label=(\alph*)]
+
+    \item \grade{5} Show that $\W$ is symmetric positive semi-definite (SPSD) and that $\norm{\K-\widetilde \K}_F =
+\norm{\K_{22} - \K_{21}\W^\dagger \K_{21}^\top}_F$, where $\norm{.}_F$ is the \href{https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm}{Frobenius norm}.
+
+    \newpage
+    \item \grade{10} Let $\K = \X^\top \X$ for some $\X \in \Rset^{N \times m}$, and let
+$\X'\in \Rset^{N \times l}$ be the first $l$ columns of $\X$. Show that
+$\widetilde \K = \X^\top \Proj_{U_{X'}} \X$, where $\Proj_{U_{X'}}$ is the
+orthogonal projection onto the span of the left singular vectors of $\X'$.
+
+   \newpage    
+   \item \grade{5} Is $\widetilde \K$ symmetric positive semi-definite (SPSD)?
+   
+   \newpage    
+   \item \grade{5} If $\rank(\K) = \rank(\W) = r \ll m$, show that $\widetilde
+\K = \K$. Note: this statement holds whenever $\rank(\K) =
+\rank(\W)$, but is of interest mainly in the low-rank setting.
+
+   \newpage    
+   \item \grade{5} If $m = 20$M and $\K$ is a dense matrix, how much space is required to
+store $\K$ if each entry is stored as a double? How much space is required by
+the Nystr\"{o}m method if $l=10$K?
+
+\end{enumerate}
+\end{document}

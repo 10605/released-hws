@@ -10,13 +10,11 @@
 \usepackage{url}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[pdfborder={0 0 1},colorlinks=true,citecolor=black,plainpages=false]{hyperref}
-%\usepackage{fancyhdr}
 \usepackage{multirow}
 \usepackage[english]{babel}
 \usepackage{pdfpages,bbm}
 \usepackage{enumitem}
 \usepackage{todonotes}
-
 
 %------------------------ math ------------------------%
 \newcommand{\R}{\mathbb{R}} % real domain
@@ -51,25 +49,8 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \DeclareMathOperator{\rank}{rank}
 \newcommand{\E}{\mathbb{E}}
-
-
-%------------------------ exam class macros ------------------------%
-\checkboxchar{$\Box$}
-% \renewcommand{\questionshook}{%
-%     \setlength{\leftmargin}{10pt}%
-%     \setlength{\labelwidth}{-\labelsep}%
-% }
-\renewcommand{\checkboxeshook}{
-  \settowidth{\leftmargin}{W.}
-  \labelwidth\leftmargin\advance\labelwidth-\labelsep
-}
-
 \newcommand{\grade}[1]{\small\textcolor{magenta}{\emph{[#1 points]}} \normalsize}
-\newcommand{\sol}[1]{\ifshowsolutions{\leavevmode{\color{blue}Solution: #1}}\fi}
 
-\newif\ifshowsolutions
-%\showsolutionsfalse % whether to show solutions (true) or not (false)
-\showsolutionstrue
 
 
 \begin{document}
@@ -93,38 +74,9 @@ that you didn't correctly assign pages to. It is also your responsibility to mak
 
 \newpage
 
-%\section{Hashing (20 pts)}
 
-% \section{True/False (8 pts)}
-% \begin{enumerate}[label=(\alph*)]
-%     \item \grade{2} Imagine we want to train a decision tree with a large number of features in a distributed setting using a classical ``Row Partitioning" approach.  To do so, we rely on a computationally motivated split finding approximation in which we downsample the number of data points considered at each split.
-    
-%         \begin{checkboxes}
-%     \choice True
-%         \choice False
-%     \end{checkboxes}
-%     \sol{False; we do rely on a computationally motivated split finding approximation, but this approximation limits the number of split values considered in order to limit communication. It does not downsample the number of data points used to identify the best split value among the possible choices.}
-% %    \item \grade{2} Question about Trees [Ameet will fill in]
-%     \item \grade{2} Question about Snorkel [Ginger will fill in on Thursday]
-%     \item \grade{2} Since the objective function of logistic regression is convex, it has a closed-form solution.
-%     \begin{checkboxes}
-%     \choice True
-%         \choice False
-%     \end{checkboxes}
-%     \sol{False}
 
-%     \item \grade{2} For feature hashing, we explored the hash kernel: $\phi(x) = \xi(x) h(x)$, where $h(x)$ is a hash function that maps $k$ items (i.e., features) to $m$ buckets, and $\xi(x)$ is a sign hash function that maps items to $\{-1, +1\}$. The purpose of including the sign hash function $\xi(x)$ is to ensure that the hash kernel provides an unbiased estimate of the true dot product, i.e., $E[\phi(x)\phi(y)] = xy$.
-%     \begin{checkboxes}
-%         \choice True
-%         \choice False
-%     \end{checkboxes}
-%     \sol{True}
-% \end{enumerate}
-
-\newpage
-\section{Count-Min Sketch Basics (15 pts)} 
-% Recall that in lecture, we explored count-min sketch as a data structure for estimating the counts of items (i.e., all positive values). In this problem, you will modify count-min sketches so that they can also be used to approximate negative values.
-
+\section{Count-Min Sketch Basics (12 pts)} 
 
 
 \begin{enumerate}[label=(\alph*)]
@@ -150,24 +102,18 @@ Suppose you see the following stream of data: $\{x_1, x_2, x_5, x_3, x_3, x_4, x
 \begin{enumerate}[label=\roman*.]
     \item \grade{2} What is the value of $\hat{c}_5$, the approximate count of item $x_5$, based on this sketch? 
     
-    \sol{$\hat{c}_5 = 1$}
     \vspace{2em} 
     \item \grade{2} What is the value of $\hat{c}_1$, the approximate count of item $x_1$, based on this sketch?
     
-    \sol{$\hat{c}_1 = 2$} 
     \vspace{2em} 
-    \item \grade{4} Let $c_s$ be the true count of item $x_s$. What is the average absolute error of approximation for all items, i.e. $\frac{1}{5}\sum_{s=1}^5|\hat{c}_s-c_s|$?
+    \item \grade{3} Let $c_s$ be the true count of item $x_s$. What is the average absolute error of approximation for all items, i.e. $\frac{1}{5}\sum_{s=1}^5|\hat{c}_s-c_s|$?
     
-    \sol{The average absolute error is $\frac{2}{5}$, since $\{\hat{c}_s,c_s\}_{s=1}^5 = \{\{2,1\}, \{2,1\}, \{2,2\}, \{2,2\}, \{1,1\}\}$}
     \vspace{3em}
+    
 \end{enumerate}
 
 
-\item \grade{7} In your own words, explain the approximation guarantees we provided in lecture for count-min sketch. What do these results tell you about how to configure count-min sketch (i.e., how to determine the number of hash functions and buckets) to achieve a certain approximation quality?
-
-% \item \grade{8} In (c) and (d), we will modify count-min sketch to handle negative values. In particular, we will use *two* count-min sketches: $C^+$, which will store positive counts, and $C^-$, which will store negative counts. Assume that each sketch has $r$ hash functions, each with $m$ buckets. 
-
-% \item \grade{8}
+\item \grade{5} In your own words, explain the approximation guarantees we provided in lecture for count-min sketch. What do these results tell you about how to configure count-min sketch (i.e., how to determine the number of hash functions and buckets) to achieve a certain approximation quality?
 
 \end{enumerate}
 
@@ -176,17 +122,15 @@ Suppose you see the following stream of data: $\{x_1, x_2, x_5, x_3, x_3, x_4, x
 
 
 \newpage
-\section{An Unbiased Sketch (30 pts)}
+\section{An Unbiased Sketch (25 pts)}
   The count-min sketch presented in lecture is {biased}, as the estimated count $\hat{c}_s$ for item $s \in \{1,\ldots,k\}$ is always
   higher than (or equal to) the true count $c_s$. In this problem,
   we will explore an \textit{unbiased} sketch.  \\
-  %First, we will start with the simplest version of Simple-Count:  
 
 \noindent Let
   $g$ be a hash function chosen from a family $G$ of independent
   hashes, such that $g$ maps each item $s$ to either $+1$ or $-1$ with
   equal probability:
-%\footnote{The randomness arises from the fact that the hash function $g$ is drawn randomly from the family $G$.  Given a hash function $g$, the mapping $g: \{1,\dots,N\}$ is deterministic.  All expectations, etc. are taken with respect to the distribution of $g$.}:
  \[
  P(g(s) = +1) = P(g(s) = -1) = 1/2. 
  \]
@@ -207,75 +151,21 @@ Given this sketch, please answer the following questions:
 
 \item[{a)}] \grade{8} First, show that this simple sketch is unbiased, i.e., $\E[\hat{c}_s] = c_s$. (\textit{Hint: Find an expression for $\hat{c}_s$ in terms of $g(s)$ and $c_s$, and use linearity of expectation.})  \\
 
-\sol{
-Let $Y_x$ be an indicator variable, which is $1$ if a collision occurs, i.e., $h(x) = h(s)$, and 0 otherwise.
-\begin{align*}
-    \E[\hat{c}_s] &= \E[C[h(s)] g(s)] \\
-    & = \E \left[\sum_{x \in \{1, \dots, k\}} Y_x c_x g(x) g(s)\right] \\
-    & = \E \left[\sum_{x \neq s} Y_x c_x g(x) g(s) + c_s g(s) g(s)\right] \\
-    & = \E \left[\sum_{x \neq s} Y_x c_x g(x) g(s) + c_s\right] \\
-    & = \sum_{x \in X, x \neq s} c_x \E[g(x)Y_x]\E[g(s)]  + c_s \\
-    & = 0 + c_s  \\
-    & = c_s
-\end{align*}
-}
-
 \newpage
 \item[{b)}] \grade{8} Let's understand how much the estimates vary. Prove that: $Var(\hat{c}_s) = \frac{1}{m}\sum_{j \in \{1, \dots, k\}, j \neq s} c_j^2$, where $m$ is the number of buckets for the hash function $h$.
 
-\sol{
-\begin{align*}
-    Var(\hat{c}_s) & = \E[(\hat{c}_s - \E[\hat{c}_s])^2] \\
-    & = \E\left[\left(\sum_{ x \neq s} Y_x c_x g(x) g(s) + c_s - c_s\right)^2 \right] \\
-    & = \E\left[\left(\sum_{ x \neq s} Y_x c_x g(x) g(s)\right)^2 \right] \\
-    & = \E\left[\sum_{x \neq s}\sum_{x' \neq s} Y_x Y_{x'} c_x c_{x'} g(x) g(x')\right] \\
-    & = \sum_{x \neq s}\sum_{x' \neq s} c_x c_{x'} \E[Y_x Y_{x'}g(x) g(x')] \\
-    & = \sum_{x\neq s} c_x^2 \E[Y_x^2] \\
-    & = \frac{1}{m} \sum_{x\neq s} c_x^2
-\end{align*}
-}
 
-% \begin{enumerate}[label=\roman*.]
-%     \item \grade{2} Find an expression for $C[s]$ in terms of only $g(s)$
-% \end{enumerate}
-%\item[{(a)}][2 points] Let $a_i$ be the true counts for each element $i$.  Express  $h$ in terms of the $a_i$ and $g(i)$ only.
-%\item[{(b)}][2 points] What is the expected value of $g(i)$, denoted by $E[g(i)]$?
-%\item[{(c)}][4 points] Prove that $\hat{a}_i = h \  g(i)$ is an unbiased estimate of $a_i$, i.e., $E[\hat{a}_i] = a_i$.  Hint: use linearity of expectations, $E[u+v] = E[u] + E[v]$, and the fact that $g(i)$ and $g(j)$ are independent.  
-% \item[{(d)}][4 points] Prove that the variance of our estimate $Var(\hat{a}_i)$ is
-%   given by:
-% \[
-% Var(\hat{a}_i) = \sum_{j\in\{1,\ldots,N\}:j\neq i} a_j^2.
-% \]
-% Hint: recall that $Var(X) = E[X^2] - (E[X])^2$.
+
 \newpage
-\item[{c)}] \grade{6} We will now bound the probability of getting a bad
+\item[{c)}] \grade{3} We will now bound the probability of getting a bad
   estimate $\hat{c}_s$, i.e., one that differs substantially from the true count $c_s$. Show that:
-  %In particular, after $n$ steps, we will say our estimate
- % $\hat{a}_i$ is $\epsilon$-bad if, for $\epsilon>0$:
-%\[
-%|\hat{a}_i - a_i| \geq \epsilon n.
-%\]
-% To prove this bound, we will use Chebyshev's inequality: If $X$ is a
-% random variable, and $\alpha >0$, then:
-% \[
-% P(|X-E[X]| \geq \alpha) \leq \frac{Var(X)}{\alpha^2} \, .
-% \]
-% Use Chebyshev's inequality and the result from (b) to prove:
+
 \[
 P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}_{-s}\|_2) \le \frac{1}{\epsilon^2 m}\, ,
 \]
 where $\mathbf{c}_{-s}$ is a vector of length $(k - 1)$ containing the counts for all items except $s$. \textit{(Hint: Consider Chebyshev's inequality.)} \\
-\sol{
-\begin{align*}
-P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}_{-s}\|^2_2) & \le \frac{Var(\hat{c}_s)}{\epsilon^2 \|\mathbf{c}_{-s}\|^2_2} \\ & = \frac{\|\mathbf{c}_{-s}\|^2_2}{\|\mathbf{c}_{-s}\|^2_2\epsilon^2 m} \\
-& = \frac{1}{\epsilon^2 m}
-\end{align*}
-}
-% Use Chebyshev's inequality to prove that the probability
-%   $\delta$ of getting a bad estimate for $\hat{a}_i$ is bounded by:
-% \[
-% \delta \leq \frac{Var(\hat{a}_i)}{\epsilon^2 n^2} \leq \frac{1}{\epsilon^2} .
-% \] 
+
+
 \newpage
 \item[{d)}] Similar to count-min sketch, we can improve the results from (c) by using $r$ hash functions for mapping the items to buckets $(h_1, \dots, h_r)$, and $r$ hash functions for assigning signs $(g_1, \dots g_r)$. In particular, setting $m > \frac{3}{\epsilon^2}$ and $r > (log(1/\delta))$, we can guarantee: 
 $$
@@ -287,64 +177,19 @@ P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}\|_1) \le \delta \, .
 $$
 With these results in mind, answer the questions below. 
 \begin{enumerate}[label=\roman*.]
-\item \grade{4} Explain a scenario where count-min sketch would be preferable to the unbiased sketch we derived (using the above bounds). \\
-\sol{CMS requires less counters (note that we need only $m > 2/\epsilon$ buckets for CMS, but $m > 3/\epsilon^2$ for the unbiased sketch). Thus, if $\|\mathbf{c}\|_1$ and $\|\mathbf{c}_{-s}\|_2$ are similar, CMS would be preferable since it requires less space.}
-\vspace{5em}
+\item \grade{3} Explain a scenario where count-min sketch would be preferable to the unbiased sketch we derived (using the above bounds). \\
 
-\item \grade{4} Explain a scenario where the unbiased sketch we derived would be preferable to count-min sketch (using the above bounds). \\
-\sol{Assuming that space is not an issue (since the unbiased sketch requires more counters), we will always have $\|\mathbf{c}_{-s}\|_2 \le \|\mathbf{c}\|_1$, and the unbiased sketch therefore offers a tighter bound. We are likely to have $\|\mathbf{c}_{-s}\|_2 \ll \|\mathbf{c}\|_1$ as the distribution of counts of each item becomes skewed, which will magnify the differences in these bounds.}
-%\item \grade{3} When would you expect the unbiased sketch to behave similarly to count-min sketch (in terms of these bounds)?
-%\sol{}
-%\item \grade{3} Explain a scenario in which the unbiased sketch provides a tighter bound than count-min sketch.
+\vspace{8em}
+
+\item \grade{3} Explain a scenario where the unbiased sketch we derived would be preferable to count-min sketch (using the above bounds). \\
+
+
 \end{enumerate}
-% \item[{(e)}] We will now bound the probability of getting a bad
-%   estimate.  In particular, after $n$ steps, we will say our estimate
-%   $\hat{a}_i$ is $\epsilon$-bad if, for $\epsilon>0$:
-% \[
-% |\hat{a}_i - a_i| \geq \epsilon n.
-% \]
-% To prove our bound, we will use Chebyshev's inequality: If $X$ is a
-% random variable, and $\alpha >0$, then:
-% \[
-% P(|X-E[X]| \geq \alpha) \leq \frac{Var(X)}{\alpha^2}.
-% \]
-% Use Chebyshev's inequality to prove that the probability
-%   $\delta$ of getting a bad estimate for $\hat{a}_i$ is bounded by:
-% \[
-% \delta \leq \frac{Var(\hat{a}_i)}{\epsilon^2 n^2} \leq \frac{1}{\epsilon^2} .
-% \] 
-% \item[{(f)}] The bound in the previous question is going to be vacuous for
-%   sufficiently small $\epsilon$.  To address this issue, we will
-%   expand the number of hash functions in our sketch.  Let's introduce
-%   a set of $k$ independent hash functions $g_j$ with the same properties
-%   as $g$ above.  Now, we will create $h_j$, in analogy to the $h$ function
-%   above, for each $g_j$.  When we see element $i$ in the sequence, we
-%   will update each $h_j$ by:
-% \[
-% h_j = h_j + g_j(i).
-% \]
-% Now, if we would like to predict the count for element $i$,
-% we simply return the average:
-% \[
-% \hat{a}_i = \frac{1}{k} \sum_{j=1}^k h_j \  g_j(i).
-% \]
-% For this sketch, prove that:
-% \begin{enumerate}
-% \item[{i.}][2 points] The variance of $\hat{a}_i$ is now bounded by:
-% \[
-% Var(\hat{a}_i) \leq \frac{n^2}{k}.
-% \]
-% \emph{Hint: The estimates obtained by each hash function are independent.} 
-% \item[{ii.}][2 points] Use this result and the Chebyshev's inequality as above to
-%   prove that for any $\epsilon>0,\delta>0$, the probability of getting an $\epsilon$-bad estimate of
-%   $\hat{a}_i$ will be lower than $\delta$ if we use $k \geq
-%   \frac{1}{\delta\epsilon^2}$ hash functions.
-% \end{enumerate}
 
 \end{itemize}
 
 \newpage
-\section{Locality-Sensitive Hashing (25 pts)}
+\section{Locality-Sensitive Hashing (23 pts)}
 
 In lecture, we saw that LSH can be used for applications such as nearest neighbors classification and clustering. We mentioned that if two points $\xv$ and $\yv$ have small \textit{cosine distance}, then the resulting bit vectors formed by using LSH, $\xv'$ and $\yv'$, will have small \textit{Hamming distance}. In this problem, we will explore this result in more detail. \\
 
@@ -360,15 +205,13 @@ $$ d_{h} (\xv',\yv') = \sum_{i=1}^k |\xv'_i - \yv'_i| \, $$
 \vspace{1em}
 
 \begin{enumerate}[label=(\alph*)]
-    \item\grade{2} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{cosine similarity} between $\av$ and $\bv$?
+    \item\grade{1} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{cosine similarity} between $\av$ and $\bv$?
     
-    \sol{$s_{cos}(\av,\bv) = 0$}
-    
+
     \vspace{5em}
-    \item\grade{2} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{Hamming distance} between $\av$ and $\bv$?
+    \item\grade{1} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{Hamming distance} between $\av$ and $\bv$?
     
-    \sol{$d_h(\av,\bv) = 4$}
-    
+
     \vspace{1em}
     
     
@@ -385,44 +228,25 @@ For two vectors $\xv,\yv \in \R^k$, prove that:
 $$P[h_z(\xv) = h_z(\yv)] = 1 - \frac{\theta(\xv,\yv)}{\pi} \, ,$$
 where $\theta(\xv,\yv)$ is the angle between vectors $\xv, \yv$ measured in radians. 
 
-%, i.e., $\theta(\xv,\yv) = \cos^{-1}(d_{cos}(\xv,\yv))$. 
 To prove this, use the fact that $P[\zv \cdot \xv \ge 0, \zv \cdot \yv < 0 ] = \frac{\theta(\xv,\yv)}{2\pi}$, i.e., the probability that a random hyperplane separates two vectors is proportional to the angle between them. 
-
-\sol{
-\begin{align*}
-P[h_z(\xv) = h_z(\yv)] & = 1 - P[h_z(\xv) \neq h_z(\yv)] \\
-& = 1 - 2 P[\zv \cdot \xv \ge 0, \zv \cdot \yv < 0] \\
-& = 1 - 2 \frac{\theta(\xv,\yv)}{2 \pi} \\
-& = 1 - \frac{\theta(\xv,\yv)}{\pi}
-\end{align*}
-}
 
 \newpage
 \item \grade{6} In LSH, we estimate $P[h_z(\xv)=h_z(\yv)]$ by selecting $b$ random hyperplanes, and calculating bit vectors $\xv'_i = h_i(\xv)$ and $\yv'_i = h_i(\yv)$ for $i=1,\dots,b$. Suppose that after running this procedure, we compute the Hamming distance and find: $d_h(\xv',\yv')=h$. Using this estimate and part (c), show that:
 $$ d_{cos}(\xv,\yv) \approx 1 - \cos\left(\frac{h}{b} \pi\right)$$
-%$$ \cos(\theta(\xv,\yv)) \approx \cos \left(\frac{h}{b} \pi\right)$$
 Note that this equation shows that if $h=b$, i.e., the bit vectors have a large hamming distance, the cosine distance will also be large ($d_{cos}(\xv,\yv) = 2$). Similarly, for $h=0$, we will have $d_{cos}(\xv,\yv) = 0$.
 
-\sol{From part (c), we have $\cos(\theta(\xv,\yv)) = \cos(\pi (1-P[h_z(\xv)=h_z(\yv)]))$. Using LSH, we estimate $P[h_z(\xv)=h_z(\yv)] =1- \frac{h}{b}$. Thus, we have $\cos(\theta(\xv,\yv) \approx \cos(\pi (1-(1-\frac{h}{b}))) = \cos(\pi \frac{h}{b})$}
-   % \item \grade{} Suppose we are using LSH for nearest neighbors (NN) classification. In NN, the  
-    
-    %\item \grade{}
     
     \newpage
     \item Let's go through a simple example using LSH. Suppose we have two vectors, $\xv = [3,4,5,6]$ and $\yv=[4,3,2,1]$.
     \begin{enumerate}[label=\roman*.]
-        %\item \grade{} What is $d_{cos}(\xv,\yv)$?
         \item \grade{3} Use one random vector: $\zv_1 = [0.16, -0.26, -1.12, 0.01]$ to perform LSH. Compute the error of the resulting estimated cosine distance, i.e., $|1 - \cos\left(\frac{h}{b}\pi\right) - d_{cos}(\xv,\yv)|$. 
         
-        \sol{error = $|1-cos(0)-d_{cos}(\xv,\yv)| = 0.7875$.}
         \vspace{8em}
         \item \grade{3} Now let's try with more vectors. Use four random vectors: $\zv_1 = [0.16, -0.26, -1.12, 0.01]$, $\zv_2=[1.08,-1.14,0.8,-0.8]$, $\zv_3 = [1.94, 0.08, 1.83, 0.17]$, $\zv_4=[-0.88, -1.01, 1.36, -0.07]$ to perform LSH. Compute the error of the estimated cosine distance.
         
-        \sol{error = $0.29 -d_{cos}(\xv,\yv) = 0.08$}
         \vspace{8em}
         \item \grade{3} In practice, it can be sufficient to consider random vectors only consisting of $\{-1,+1\}$ when performing LSH. Use the signs of the previous random vectors, i.e., $\zv_1 = [+1, -1, -1, +1]$, $\zv_2=[+1,-1,+1,-1]$, $\zv_3 = [+1,+1,+1,+1]$, $\zv_4=[-1,-1,+1,-1]$, to perform LSH. Compute the error of the estimated cosine distance.
         
-        \sol{The result is the same as the previous question, i.e., error = $0.29 -d_{cos}(\xv,\yv) = 0.08$}
     \end{enumerate}
 \end{enumerate}
 

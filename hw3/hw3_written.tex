@@ -1,0 +1,253 @@
+\documentclass{exam}
+
+%------------------------ packages ------------------------%
+\usepackage{amsmath,amsfonts,amsthm,amssymb,amsopn,bm}
+\usepackage{pythontex}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage[paper=letterpaper,margin=1in,includeheadfoot,footskip=0.25in,headsep=0.25in]{geometry}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[pdfborder={0 0 1},colorlinks=true,citecolor=black,plainpages=false]{hyperref}
+\usepackage{multirow}
+\usepackage[english]{babel}
+\usepackage{pdfpages,bbm}
+\usepackage{enumitem}
+\usepackage{todonotes}
+
+%------------------------ math ------------------------%
+\newcommand{\R}{\mathbb{R}} % real domain
+\newcommand{\Rset}{\mathbb{R}} % real domain
+\newcommand{\argmin}{\operatorname{argmin}}
+\newcommand{\argmax}{\operatorname{argmax}}
+\newcommand{\xv}{\mathbf{x}}
+\newcommand{\av}{\mathbf{a}}
+\newcommand{\bv}{\mathbf{b}}
+\newcommand{\yv}{\mathbf{y}}
+\newcommand{\wv}{\mathbf{w}}
+\newcommand{\uv}{\mathbf{u}}
+\newcommand{\zv}{\mathbf{z}}
+\newcommand{\Xv}{\mathbf{X}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\M}{\mathbf{M}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\Proj}{\mathbf{P}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\U}{\mathbf{U}}
+\renewcommand{\L}{\mathbf{L}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\mD}{\mathbf{D}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\grade}[1]{\small\textcolor{magenta}{\emph{[#1 points]}} \normalsize}
+
+
+
+\begin{document}
+
+\title{Homework 3 Written Assignment}
+\author{\Large \bf 10-605/10-805: Machine Learning with Large Datasets}
+\date{{\bf Due Thursday, October 8th at 1:30:00 PM Eastern Time}}
+\maketitle
+
+\paragraph{Instructions:} Submit your solutions via Gradescope, \textit{with your solution to each subproblem on a separate page}, i.e., following the template below.  Note that Homework 3 consists of two parts: this written assignment, and a programming assignment. The written part is worth \textbf{60\%} of your total HW3 grade. The programming part makes up the remaining 40\%.
+
+\paragraph{Submitting via Gradescope:} When submitting on Gradescope, you must assign pages to each question correctly (it
+prompts you to do this after submitting your work). This significantly streamlines the
+grading process for the course staff.  Failure to do this may result in a score of 0 for any questions
+that you didn't correctly assign pages to. It is also your responsibility to make sure that your scan/submission is legible so that we can grade it.
+
+\paragraph{Collaboration:}  While you may talk with others about the homework, you must each turn in your own solution and it should be your own work. \text{Please list the names of any collaborators below.}
+
+\paragraph{Collaborators:}
+
+
+\newpage
+
+
+
+\section{Count-Min Sketch Basics (15 pts)} 
+
+
+\begin{enumerate}[label=(\alph*)]
+
+\item Let's use count-min sketch to estimate the counts of a stream of 5 items: $x_1, x_2, x_3, x_4, x_5$, using 3 hash functions: $h_1, h_2, h_3$, each with 3 buckets. The hash functions have the following collision matrix: 
+
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{4}{|c|}{collision matrix} \\
+ \hline
+ $h_1$   & $x_1, x_2$    &$x_4, x_5$ &   $x_3$ \\
+ \hline
+ $h_2$&   $x_2, x_3$  & $x_1, x_4$   & $x_5$ \\
+ \hline
+$h_3$ & $x_4$ & $x_1, x_5$ &  $x_2, x_3$ \\
+ \hline
+\end{tabular}
+\end{center} \hspace{0pt}
+
+Suppose you see the following stream of data: $\{x_1, x_2, x_5, x_3, x_3, x_4, x_4\}$.
+
+\begin{enumerate}[label=\roman*.]
+    \item \grade{2} What is the value of $\hat{c}_5$, the approximate count of item $x_5$, based on this sketch? 
+    
+    \vspace{2em} 
+    \item \grade{2} What is the value of $\hat{c}_1$, the approximate count of item $x_1$, based on this sketch?
+    
+    \vspace{2em} 
+    \item \grade{4} Let $c_s$ be the true count of item $x_s$. What is the average absolute error of approximation for all items, i.e. $\frac{1}{5}\sum_{s=1}^5|\hat{c}_s-c_s|$?
+    
+    \vspace{3em}
+    
+\end{enumerate}
+
+
+\item \grade{7} In your own words, explain the approximation guarantees we provided in lecture for count-min sketch. What do these results tell you about how to configure count-min sketch (i.e., how to determine the number of hash functions and buckets) to achieve a certain approximation quality?
+
+\end{enumerate}
+
+
+
+
+
+\newpage
+\section{An Unbiased Sketch (30 pts)}
+  The count-min sketch presented in lecture is {biased}, as the estimated count $\hat{c}_s$ for item $s \in \{1,\ldots,k\}$ is always
+  higher than (or equal to) the true count $c_s$. In this problem,
+  we will explore an \textit{unbiased} sketch.  \\
+
+\noindent Let
+  $g$ be a hash function chosen from a family $G$ of independent
+  hashes, such that $g$ maps each item $s$ to either $+1$ or $-1$ with
+  equal probability:
+ \[
+ P(g(s) = +1) = P(g(s) = -1) = 1/2. 
+ \]
+ Let's start with a simple version of the sketch, which uses one additional hash function, $h$, which maps each item $s$ to one of $m$ buckets. 
+Assume that $g$ and $h$ are independent. When we observe an item $s$ in the
+sequence, we simply update the sketch counter, $C$, as:
+\[
+C[h(s)] =C[h(s)] + g(s).
+\]
+Then, if we would like to predict the count for item $s$,
+we return:
+\[
+\hat{c}_s = C[h(s)] \  g(s).
+\]
+Given this sketch, please answer the following questions:
+
+\begin{itemize}
+
+\item[{a)}] \grade{8} First, show that this simple sketch is unbiased, i.e., $\E[\hat{c}_s] = c_s$. (\textit{Hint: Find an expression for $\hat{c}_s$ in terms of $g(s)$ and $c_s$, and use linearity of expectation.})  \\
+
+\newpage
+\item[{b)}] \grade{8} Let's understand how much the estimates vary. Prove that: $Var(\hat{c}_s) = \frac{1}{m}\sum_{j \in \{1, \dots, k\}, j \neq s} c_j^2$, where $m$ is the number of buckets for the hash function $h$.
+
+
+
+\newpage
+\item[{c)}] \grade{6} We will now bound the probability of getting a bad
+  estimate $\hat{c}_s$, i.e., one that differs substantially from the true count $c_s$. Show that:
+
+\[
+P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}_{-s}\|_2) \le \frac{1}{\epsilon^2 m}\, ,
+\]
+where $\mathbf{c}_{-s}$ is a vector of length $(k - 1)$ containing the counts for all items except $s$. \textit{(Hint: Consider Chebyshev's inequality.)} \\
+
+
+\newpage
+\item[{d)}] Similar to count-min sketch, we can improve the results from (c) by using $r$ hash functions for mapping the items to buckets $(h_1, \dots, h_r)$, and $r$ hash functions for assigning signs $(g_1, \dots g_r)$. In particular, setting $m > \frac{3}{\epsilon^2}$ and $r > (log(1/\delta))$, we can guarantee: 
+$$
+P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}_{-s}\|_2) \le \delta\, .
+$$
+Note that while this result appears similar to the one we had for count-min sketch, it requires more buckets, $m$. Recall that for count-min sketch with $m > \frac{2}{\epsilon}$ and $r > (log(1/\delta))$, we had the bound:
+$$
+P(|\hat{c}_s - c_s| \ge \epsilon \|\mathbf{c}\|_1) \le \delta \, .
+$$
+With these results in mind, answer the questions below. 
+\begin{enumerate}[label=\roman*.]
+\item \grade{4} Explain a scenario where count-min sketch would be preferable to the unbiased sketch we derived (using the above bounds). \\
+
+\vspace{8em}
+
+\item \grade{4} Explain a scenario where the unbiased sketch we derived would be preferable to count-min sketch (using the above bounds). \\
+
+
+\end{enumerate}
+
+\end{itemize}
+
+\newpage
+\section{Locality-Sensitive Hashing (25 pts)}
+
+In lecture, we saw that LSH can be used for applications such as nearest neighbors classification and clustering. We mentioned that if two points $\xv$ and $\yv$ have small \textit{cosine distance}, then the resulting bit vectors formed by using LSH, $\xv'$ and $\yv'$, will have small \textit{Hamming distance}. In this problem, we will explore this result in more detail. \\
+
+\noindent First, let's recall the definitions of cosine similarity, cosine distance, and Hamming distance.\\
+
+\noindent \textit{Cosine similarity} measures the cosine of the angle between two vectors $\xv, \yv \in \R^k$, and can be calculated as:
+$$ s_{cos}(\xv,\yv) = \cos(\theta(\xv,\yv)) =  \frac{\xv \cdot \yv}{\|\xv\|_2 \|\yv\|_2} \, $$
+
+\noindent \textit{Cosine distance} is measured as $d_{cos}(\xv,\yv) = 1-s_{cos}(\xv,\yv).$ \\
+
+\noindent \textit{Hamming distance} between two \textit{binary} (0-1) vectors $\xv', \yv'$ of length $k$ measures the number of differing bits, and is calculated as:
+$$ d_{h} (\xv',\yv') = \sum_{i=1}^k |\xv'_i - \yv'_i| \, $$
+\vspace{1em}
+
+\begin{enumerate}[label=(\alph*)]
+    \item\grade{2} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{cosine similarity} between $\av$ and $\bv$?
+    
+
+    \vspace{5em}
+    \item\grade{2} Define $\av = [0,0,1,1,0]$, $\bv = [0,1,0,0,1]$. What's the \textit{Hamming distance} between $\av$ and $\bv$?
+    
+
+    \vspace{1em}
+    
+    
+    \newpage
+    \item \grade{6} For a random hyperplane, $\zv$, define the following hash function: 
+    $$
+h_{z}(\xv) =
+\begin{cases}
+1 \quad \text{if} \quad \zv \cdot \xv \ge 0  \\
+0 \quad \text{if} \quad \zv \cdot \xv < 0
+\end{cases}
+$$
+For two vectors $\xv,\yv \in \R^k$, prove that:
+$$P[h_z(\xv) = h_z(\yv)] = 1 - \frac{\theta(\xv,\yv)}{\pi} \, ,$$
+where $\theta(\xv,\yv)$ is the angle between vectors $\xv, \yv$ measured in radians. 
+
+To prove this, use the fact that $P[\zv \cdot \xv \ge 0, \zv \cdot \yv < 0 ] = \frac{\theta(\xv,\yv)}{2\pi}$, i.e., the probability that a random hyperplane separates two vectors is proportional to the angle between them. 
+
+\newpage
+\item \grade{6} In LSH, we estimate $P[h_z(\xv)=h_z(\yv)]$ by selecting $b$ random hyperplanes, and calculating bit vectors $\xv'_i = h_i(\xv)$ and $\yv'_i = h_i(\yv)$ for $i=1,\dots,b$. Suppose that after running this procedure, we compute the Hamming distance and find: $d_h(\xv',\yv')=h$. Using this estimate and part (c), show that:
+$$ d_{cos}(\xv,\yv) \approx 1 - \cos\left(\frac{h}{b} \pi\right)$$
+Note that this equation shows that if $h=b$, i.e., the bit vectors have a large hamming distance, the cosine distance will also be large ($d_{cos}(\xv,\yv) = 2$). Similarly, for $h=0$, we will have $d_{cos}(\xv,\yv) = 0$.
+
+    
+    \newpage
+    \item Let's go through a simple example using LSH. Suppose we have two vectors, $\xv = [3,4,5,6]$ and $\yv=[4,3,2,1]$.
+    \begin{enumerate}[label=\roman*.]
+        \item \grade{3} Use one random vector: $\zv_1 = [0.16, -0.26, -1.12, 0.01]$ to perform LSH. Compute the error of the resulting estimated cosine distance, i.e., $|1 - \cos\left(\frac{h}{b}\pi\right) - d_{cos}(\xv,\yv)|$. 
+        
+        \vspace{8em}
+        \item \grade{3} Now let's try with more vectors. Use four random vectors: $\zv_1 = [0.16, -0.26, -1.12, 0.01]$, $\zv_2=[1.08,-1.14,0.8,-0.8]$, $\zv_3 = [1.94, 0.08, 1.83, 0.17]$, $\zv_4=[-0.88, -1.01, 1.36, -0.07]$ to perform LSH. Compute the error of the estimated cosine distance.
+        
+        \vspace{8em}
+        \item \grade{3} In practice, it can be sufficient to consider random vectors only consisting of $\{-1,+1\}$ when performing LSH. Use the signs of the previous random vectors, i.e., $\zv_1 = [+1, -1, -1, +1]$, $\zv_2=[+1,-1,+1,-1]$, $\zv_3 = [+1,+1,+1,+1]$, $\zv_4=[-1,-1,+1,-1]$, to perform LSH. Compute the error of the estimated cosine distance.
+        
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}
